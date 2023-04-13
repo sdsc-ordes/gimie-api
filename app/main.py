@@ -1,10 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-
-from starlette.requests import Request
-from starlette.responses import Response
-from traceback import print_exception
-
+import os
 from gimie.project import Project
 
 
@@ -12,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 def index():
-    return {"title": "Hello, Welcome to the Gimie API"}
+    return {"title": "Hello, welcome to the Gimie API"}
 
 @app.get("/test/{string}")
 async def test(string):
@@ -21,16 +17,18 @@ async def test(string):
 @app.get("/gimie/project/{full_path:path}")
 async def gimieJSON(full_path:str):
     try:
-        proj = Project("https://github.com/SDSC-ORD/gimie")
+        proj = Project(full_path)
 
         return {"link": full_path, "output": proj}
     except Exception as e:
-        return {"link": full_path, "output": e}
+        print("Exception:"+str(e))
+        print(os.environ.get('ACCESS_TOKEN'))
+        return {"link": full_path, "output": str(e)}
     
 @app.get("/gimie/ttl/{full_path:path}")
-async def gimieJSON(full_path:str):
+async def gimieTTL(full_path:str):
     try:
-        proj = Project("https://github.com/SDSC-ORD/gimie")
+        proj = Project(full_path)
 
         # To retrieve the rdflib.Graph object
         g = proj.to_graph()
