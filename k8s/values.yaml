@@ -1,0 +1,3 @@
+image:
+  repository: "cmdoret/gimie-api-container"
+  tag: "latest"
