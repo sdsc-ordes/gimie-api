@@ -40,6 +40,21 @@ async def gimieTTL(full_path:str):
     except Exception as e:
         return {"link": full_path, "output": e}
 
+    
+@app.get("/gimie/jsonld/{full_path:path}")
+async def gimie_jsonld(full_path:str):
+    try:
+        proj = Project(full_path)
+
+        # To retrieve the rdflib.Graph object
+        g = proj.to_graph()
+
+        # To retrieve the serialized graph
+        output = proj.serialize(format='json-ld')
+
+        return {"link": full_path, "output": output}
+    except Exception as e:
+        return {"link": full_path, "output": e}
 
 @app.exception_handler(ValueError)
 async def value_error_exception_handler(request: Request, exc: ValueError):
