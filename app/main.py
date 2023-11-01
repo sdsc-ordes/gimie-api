@@ -28,16 +28,18 @@ async def gimieJSON(full_path:str):
 @app.get("/gimie/ttl/{full_path:path}")
 async def gimieTTL(full_path:str):
     try:
+        print(os.environ.get('ACCESS_TOKEN'))
         proj = Project(full_path)
 
         # To retrieve the rdflib.Graph object
-        g = proj.to_graph()
+        g = proj.extract()
 
         # To retrieve the serialized graph
         output = proj.serialize(format='ttl')
 
         return {"link": full_path, "output": output}
     except Exception as e:
+        print(e)
         return {"link": full_path, "output": e}
 
     
