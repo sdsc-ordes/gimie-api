@@ -38,3 +38,8 @@ http://0.0.0.0:8000/gimie/ttl/https://github.com/SDSC-ORD/gimie
 ```
 http://localhost:8000/docs
 ```
+
+## ChangeLog
+
+- v0.0.2: Updating gimie to release  [0.6.0 release](https://github.com/SDSC-ORD/gimie/releases/tag/0.6.0).
+- v0.0.1: Basic service using main branch from gimie. 
