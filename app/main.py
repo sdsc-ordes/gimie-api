@@ -35,7 +35,7 @@ async def gimieTTL(full_path:str):
         g = proj.extract()
 
         # To retrieve the serialized graph
-        output = proj.serialize(format='ttl')
+        output = g.serialize(format='ttl')
 
         return {"link": full_path, "output": output}
     except Exception as e:
@@ -49,10 +49,10 @@ async def gimie_jsonld(full_path:str):
         proj = Project(full_path)
 
         # To retrieve the rdflib.Graph object
-        g = proj.to_graph()
+        g = proj.extract()
 
         # To retrieve the serialized graph
-        output = proj.serialize(format='json-ld')
+        output = g.serialize(format='json-ld')
 
         return {"link": full_path, "output": output}
     except Exception as e:
