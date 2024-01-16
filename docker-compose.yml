@@ -2,7 +2,7 @@ version: '3'
 services:
   core_api:
     build: .
-    container_name: "core-api-container"
+    container_name: "gimie-api"
     ports:
       - "7000:15400"
     volumes:
