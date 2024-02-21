@@ -1,0 +1,11 @@
+name: gimie-api
+description: Helm chart for using Gimie as a REST API.
+version: 0.0.1
+apiVersion: v1
+type: application
+keywords:
+  - gimie
+sources:
+  - https://github.com/sdsc-ordes/gimie
+home: https://github.com/sdsc-ordes/gimieAPI
+icon: https://raw.githubusercontent.com/sdsc-ordes/gimie/main/docs/logo.svg

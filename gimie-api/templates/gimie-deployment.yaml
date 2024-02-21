@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gimie
+  labels:
+    io.gimie.service: gimie-api
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      io.gimie.service: gimie-api
+  template:
+    metadata:
+      labels:
+        io.gimie.service: gimie-api
+    spec:
+      selector:
+        io.gimie.service: gimie-api
+      restartPolicy: Always
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+          - containerPort: 15400
+          env:
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: GITHUB_TOKEN
+                  name: {{ .Release.Name }}-tokens
+            - name: GITLAB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: GITLAB_TOKEN
+                  name: {{ .Release.Name }}-tokens

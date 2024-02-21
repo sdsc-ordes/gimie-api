@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gimie-api
+  labels:
+    io.gimie.service: gimie-api
+spec:
+  type: NodePort
+  ports:
+    - name: "gimie-port"
+      port: 15400
+      targetPort: 15400
+  selector:
+    io.gimie.service: gimie-api
+status:
+  loadBalancer: {}
