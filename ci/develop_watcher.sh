@@ -3,6 +3,9 @@
 
 cd /imaging-plaza/gimie-api || exit
 
+# Fetch the latest changes from the remote
+git fetch origin develop
+
 # Check if local is behind remote
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/develop)
