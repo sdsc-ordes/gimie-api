@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+gimie==0.7.0
+pyyaml
