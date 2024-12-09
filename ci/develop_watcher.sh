@@ -1,14 +1,14 @@
 #!/bin/bash
-# Usage: */5 * * * * /path/to/script.sh >> /path/to/logfile.log 2>&1
+# Usage: */5 * * * * /imaging-plaza/ci/develop_watcher.sh >> /imaging-plaza/ci/develop_watcher.log 2>&1
 
 cd /imaging-plaza/gimie-api || exit
 
 # Check if local is behind remote
-LOCAL=$(git rev-parse develop)
+LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/develop)
 
 if [ "$LOCAL" != "$REMOTE" ]; then
-  echo "Changes detected. Pulling..."
+  echo "$(date '+%Y-%m-%d %H:%M:%S'). Changes detected. Pulling..."
   git pull origin develop
   
   # Stop and remove the old container
@@ -19,5 +19,5 @@ if [ "$LOCAL" != "$REMOTE" ]; then
   docker build -t gimieapi .
   docker run -d --name gimieapi -p 7000:15400 gimieapi
 else
-  echo "No changes found."
+  echo "$(date '+%Y-%m-%d %H:%M:%S'). No changes found."
 fi
