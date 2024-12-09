@@ -8,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 def index():
-    return {"title": "Hello, welcome to the Gimie API"}
+    return {"title": "Hello, welcome to the Gimie API v0.1.0"}
 
 @app.get("/test/{string}")
 async def test(string):
