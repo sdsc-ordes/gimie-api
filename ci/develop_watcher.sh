@@ -15,12 +15,12 @@ if [ "$LOCAL" != "$REMOTE" ]; then
   git pull origin develop
   
   # Stop and remove the old container
-  docker stop gimieapi || true
-  docker rm gimieapi || true
+  docker stop gimie-api || true
+  docker rm gimie-api || true
   
   # Rebuild and run the new container
-  docker build -t gimieapi .
-  docker run -d --name gimieapi -p 7000:15400 gimieapi
+  docker build -t gimie-api .
+  docker run -d --name gimie-api --env-file .env -p 7511:15400 gimie-api
 else
   echo "$(date '+%Y-%m-%d %H:%M:%S'). No changes found."
 fi
