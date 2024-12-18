@@ -46,6 +46,6 @@ http://localhost:8000/docs
 
 ## Changelog
 
-- v0.1.0: Updating gimie to release [0.7.0](https://github.com/sdsc-ordes/gimie/releases/tag/v0.7.0)
+- v0.1.0: Updating gimie to release [0.7.0](https://github.com/sdsc-ordes/gimie/releases/tag/v0.7.2)
 - v0.0.2: Updating gimie to release  [0.6.0](https://github.com/SDSC-ORD/gimie/releases/tag/0.6.0).
 - v0.0.1: Basic service using main branch from gimie.
