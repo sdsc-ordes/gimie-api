@@ -1,6 +1,6 @@
 #!/bin/bash
 # chmod +x prod_watcher.sh
-# Usage: */5 * * * * /imaging-plaza/ci/prod_watcher.sh >> /imaging-plaza/ci/prod_watcher.log 2>&1
+# Usage: */5 * * * * /imaging-plaza/gimie-api/ci/prod_watcher.sh >> /imaging-plaza/gimie-api/ci/prod_watcher.log 2>&1
 
 cd /imaging-plaza/gimie-api || exit
 
