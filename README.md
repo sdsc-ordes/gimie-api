@@ -11,11 +11,11 @@ docker-compose up # add -d for detached
 or
 
 ``` bash
-docker build -t gimieapi .
-docker run --env-file .env -p 7005:15400 gimieapi
+docker build -t gimie-api .
+docker run --env-file .env -p 7005:15400 gimie-api
 ```
 
-This will serve a instance running by default in port 7123. 
+This will serve a instance running by default in port 7123.
 
 
 ## How to use the API
@@ -44,8 +44,16 @@ http://0.0.0.0:7123/gimie/ttl/https://github.com/SDSC-ORD/gimie
 http://localhost:8000/docs
 ```
 
+## How to develop?
+
+``` bash
+docker build -t gimie-api .
+docker run --env-file .env -p 7005:15400 -it --entrypoint bash -v app:/app gimie-api -c "uvicorn app.main:app --host 0.0.0.0 --port 15400"
+```
+
 ## Changelog
 
+- v0.2.0: Including orcid parsing
 - v0.1.0: Updating gimie to release [0.7.0](https://github.com/sdsc-ordes/gimie/releases/tag/v0.7.2)
 - v0.0.2: Updating gimie to release  [0.6.0](https://github.com/SDSC-ORD/gimie/releases/tag/0.6.0).
 - v0.0.1: Basic service using main branch from gimie.
