@@ -3,3 +3,6 @@ uvicorn
 gimie==0.7.2
 pyyaml
 beautifulsoup4
+google-genai
+repo-to-text==0.5.4
+tiktoken
