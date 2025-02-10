@@ -5,6 +5,50 @@ import argparse
 import tempfile
 import tiktoken
 from google import genai
+from google.genai import types
+
+import pydantic 
+from pydantic import BaseModel
+from typing import List
+
+import json
+from pprint import pprint
+
+class RepositoryInfo(BaseModel):
+    title: str
+    description: str
+    #urls: List[str]
+    images: List[str]
+    disciplines: List[str]
+    institutions: List[str]
+    compatible_inputs: List[str]
+    outputs: List[str]
+    docker_images: List[str]
+    notebooks: List[str]
+    datasets: List[str]
+    epfl_tool: bool
+    reasons_to_be_epfl_tool: List[str]
+
+system_prompt = """
+You are an expert in scientfic software that is trying to categorize github repositories. 
+The user will provide you the codebase + some metadata and you'll need to fill the following fields:
+
+- Title: Title of the software
+- Description: Try to describe the software in a few sentences.
+- Images: A few images representatives of the software. 
+- Disciplines: List of disciplines that the software is compatible with.
+- Institutions: List of institutions that have contributed to the software.
+- Compatible inputs: List of inputs that the software can take.
+- Outputs: List of outputs that the software can generate.
+- Docker images: List of Docker images that are relevant to the software.
+- Notebooks: List of Jupyter notebooks that are relevant to the software.
+- Datasets: List of datasets that are relevant to the software.
+- EPFL tool: True/False if the software is an EPFL tool. EPFL means Ecole Politechnique Federale de Lausanne.
+- Reason to be EPFL tool: If the software is an EPFL tool, why is it an EPFL tool?
+"""
+
+# - URLs: List of URLs that are relevant to the software.
+
 
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
@@ -51,35 +95,59 @@ def main():
         my_file = client.files.upload(file=combined_file_path)
 
 
-        response = client.models.count_tokens(
+        response_tokens = client.models.count_tokens(
             model='gemini-2.0-flash',
             contents=[args.question, my_file],
         )
 
-        real_tokens = int(response.total_tokens)
+        real_tokens = int(response_tokens.total_tokens)
 
         if real_tokens < 990000:
             # Generate the content response using Gemini
+            # response = client.models.generate_content(
+            #     model="gemini-2.0-flash",
+            #     contents=[args.question, my_file]
+            # )
             response = client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=[args.question, my_file]
+                model='gemini-2.0-flash', 
+                contents=[args.question, my_file],
+                config=types.GenerateContentConfig(
+                    system_instruction=system_prompt,
+                    top_k= 2,
+                    top_p= 0.5,
+                    temperature= 0.1,
+                    response_mime_type= 'application/json',
+                    response_schema= RepositoryInfo,
+                    seed=42,
+                )
             )
 
-            print(response.text)
+            try:
+                if response.parsed is None:
+                    raw_content = response.text
+                    result = json.loads(raw_content)
+                    pprint(result)
+                else:
+                    result = response.parsed.model_dump()
+                    pprint(result)
 
-            # Count tokens in the combined document and the output
-            encoding = tiktoken.get_encoding("cl100k_base")
-            doc_token_count = len(encoding.encode(combined_text))
-            output_token_count = len(encoding.encode(response.text))
-            print(f"Document token count: {doc_token_count}")
-            print(f"Output token count: {output_token_count}")
+                # Count tokens in the combined document and the output
+                encoding = tiktoken.get_encoding("cl100k_base")
+                doc_token_count = len(encoding.encode(combined_text))
+                output_token_count = len(encoding.encode(str(result)))
+                print(f"Document token count: {doc_token_count}")
+                print(f"Output token count: {output_token_count}")
+
+            except Exception as e:
+                print(f"Error: {e}")
+
+            #print(response.text)
         else:
             print(f"The input is too long to be processed by Gemini. {real_tokens}")
 
         # Delete the uploaded file from Gemini
         delete_response = client.files.delete(name=my_file.name)
         print(delete_response)
-
 
 
 
