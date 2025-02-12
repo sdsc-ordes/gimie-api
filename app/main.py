@@ -113,7 +113,8 @@ async def v2_repository_jsonld(
                         'orcid': output
                     })
             except Exception as e:
-                print (f"Error: {e}, {person["@id"]}")
+                id_person = person["@id"]
+                print (f"Error: {e}, {id_person}")
                 pass
 
         return {"url": full_path, "output": orcid_records}
