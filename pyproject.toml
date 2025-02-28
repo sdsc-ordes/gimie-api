@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gimie-api"
+version = "0.1.0"
+authors = [
+  { name="Swiss Data Science Center", email="contact@datascience.ch" },
+]
+description = "Web service for the Git MetaInformation Extractor."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "AGPL-3.0"
+license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "gimie==0.7.2",
+  "pyyaml",
+  "beautifulsoup4",
+]
+
+[project.urls]
+Homepage = "https://github.com/sdsc-ordes/gimie-api"
+Issues = "https://github.com/sdsc-ordes/gimie-api/issues"
+
+[project.optional-dependencies]
+dev = [
+  "ruff",
+  "pre-commit",
+]
+test = [
+    "pytest",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gimie-api"]
