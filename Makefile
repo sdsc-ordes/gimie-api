@@ -9,7 +9,8 @@ docker-build: ## Build Docker images
 	$(CONTAINER_RUNTIME) build \
 		-f tools/docker/Dockerfile \
 		-t $(IMAGE):$(VERSION) \
-		--build-arg VERSION=$(VERSION)
+		--build-arg VERSION=$(VERSION) \
+		.
 
 .PHONY: docker-push
 docker-push: docker-build ## Push Docker images
