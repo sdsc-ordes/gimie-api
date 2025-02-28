@@ -5,17 +5,17 @@
 First rename the `.env.dist` file to `.env` and add your github/gitlab token. Then you can run:
 
 ``` bash
-docker-compose up # add -d for detached
+make docker-compose-up
 ```
 
 or
 
 ``` bash
-docker build -t gimie-api .
-docker run --env-file .env -p 7005:15400 gimie-api
+make docker-build
+make docker-run
 ```
 
-This will serve a instance running by default in port 7123.
+This will serve a container exposing the API on port 7123.
 
 
 ## How to use the API
@@ -41,5 +41,5 @@ http://0.0.0.0:7123/gimie/ttl/https://github.com/sdsc-ordes/gimie
 ## How to access to the API documentation 
 
 ``` bash
-http://localhost:8000/docs
+http://localhost:7123/docs
 ```

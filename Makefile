@@ -12,10 +12,10 @@ docker-build: ## Build Docker images
 		.
 
 .PHONY: docker-run
-docker-run: ## Run docker image
+docker-run: docker-build ## Run docker image
 	$(CONTAINER_RUNTIME) run \
 		--env-file .env \
-		-p 7005:15400 \
+		-p 7123:15400 \
 		$(IMAGE):$(VERSION)
 
 .PHONY: docker-push
