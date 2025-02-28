@@ -11,6 +11,13 @@ docker-build: ## Build Docker images
 		--build-arg VERSION=$(VERSION) \
 		.
 
+.PHONY: docker-run
+docker-run: ## Run docker image
+	$(CONTAINER_RUNTIME) run \
+		--env-file .env \
+		-p 7005:15400 \
+		$(IMAGE):$(VERSION)
+
 .PHONY: docker-push
 docker-push: docker-build ## Push Docker images
 	@echo "🐋 Pushing docker image"
