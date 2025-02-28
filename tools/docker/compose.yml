@@ -1,11 +1,12 @@
-version: '3'
 services:
-  core_api:
-    build: .
+  gimie_api:
+    environment:
+      env_file: .env
+    build:
+      context: ../..
+      dockerfile: ./tools/docker/Dockerfile
     container_name: "gimie-api"
     ports:
-      - "7000:15400"
+      - "7123:15400"
     volumes:
-      - ./app/:/app
-    env_file:
-      - .env
+      - ../../src/:/app/src
