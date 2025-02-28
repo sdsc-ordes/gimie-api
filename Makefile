@@ -5,7 +5,6 @@ CONTAINER_RUNTIME ?= docker
 .PHONY: docker-build
 docker-build: ## Build Docker images
 	@echo "🐋 Building docker image"
-
 	$(CONTAINER_RUNTIME) build \
 		-f tools/docker/Dockerfile \
 		-t $(IMAGE):$(VERSION) \
