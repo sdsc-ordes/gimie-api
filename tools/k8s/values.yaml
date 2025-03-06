@@ -1,0 +1,6 @@
+#@data/values
+---
+name: "gimie-api"
+namespace: "gimie"
+replicas: 3
+

@@ -1,0 +1,12 @@
+#@data/values-schema
+
+---
+name: "gimie-api"
+#@schema/validation min_len=1
+namespace: ""
+replicas: 1
+#@schema/validation min_len=1
+image: "ghcr.io/sdsc-ordes/gimie-api:latest"
+tokens:
+  github: ""
+  gitlab: ""
