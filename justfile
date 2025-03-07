@@ -1,4 +1,5 @@
 set positional-arguments
+set dotenv-required
 set shell := ["bash", "-cue"]
 
 root_dir := `git rev-parse --show-toplevel`
