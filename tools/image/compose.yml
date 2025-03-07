@@ -4,7 +4,7 @@ services:
       env_file: .env
     build:
       context: ../..
-      dockerfile: ./tools/docker/Dockerfile
+      dockerfile: ./tools/image/Dockerfile
     container_name: "gimie-api"
     ports:
       - "7123:15400"
