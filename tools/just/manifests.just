@@ -8,12 +8,6 @@ set shell := ["bash", "-cue"]
 default:
   just --list manifests --no-aliases
 
-alias fmt := format
-# Format manifests.
-format:
-  @cd "{{deploy_dir}}" && \
-    ytt fmt -f .
-
 # Render manifests
 render: 
   cd "{{deploy_dir}}" && \
