@@ -5,7 +5,7 @@ root_dir := `git rev-parse --show-toplevel`
 ctr := "docker"
 tag := "latest"
 image := "ghcr.io/sdsc-ordes/gimie-api:" + tag
-image_dir := root_dir + "/tools/image/Dockerfile"
+image_dir := root_dir + "/tools/image"
 
 # Default recipe to list all recipes.
 [private]
@@ -13,32 +13,37 @@ default:
   just --list docker --no-aliases
 
 # Build Docker images
-build:
+build *args:
   @echo "🐋 Building docker image"
   cd {{root_dir}} && \
     {{ctr}} build \
-      -f "{{image_dir}}" \
+      -f "{{image_dir}}/Dockerfile" \
       -t "{{image}}" \
       --build-arg VERSION="{{tag}}" \
+      {{args}} \
       .
 # Run docker image
-run: build
+run *args: build
   cd {{root_dir}} && \
     {{ctr}} run \
       --env-file .env \
       -p 7123:15400 \
+      {{args}} \
       "{{image}}"
 
 # Push Docker images
-push: build
+push *args: build
   @echo "🐋 Pushing docker image"
   cd {{root_dir}} && \
-    {{ctr}} push {{image}}
+    {{ctr}} push {{args}} {{image}}
 
-compose-up: ## Run the Docker Compose stack
+# Start the Docker Compose stack
+compose-up *args: 
   @echo "🐋 Running docker-compose"
   cd {{root_dir}} && \
     {{ctr}} compose \
-      -f "{{image_dir}}" \
-      up --build
+      --env-file .env \
+      --project-directory "{{root_dir}}" \
+      -f "{{image_dir}}/compose.yml" \
+      up --build {{args}}
 
