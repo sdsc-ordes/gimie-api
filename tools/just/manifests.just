@@ -4,6 +4,7 @@ root_dir := `git rev-parse --show-toplevel`
 deploy_dir := root_dir + "/tools/deploy"
 set positional-arguments
 set shell := ["bash", "-cue"]
+# Secrets from YTT prefixed env vars to inject into manifests.
 export YTT_tokens__github := env('GITHUB_TOKEN')
 export YTT_tokens__gitlab := env('GITLAB_TOKEN')
 

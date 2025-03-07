@@ -22,6 +22,7 @@ build *args:
       --build-arg VERSION="{{tag}}" \
       {{args}} \
       .
+
 # Run docker image
 run *args: build
   cd {{root_dir}} && \
