@@ -40,6 +40,7 @@
             just
             kubectl
             sops
+            uv
             vendir
             yamlfmt
             ytt
