@@ -2,9 +2,9 @@
 set positional-arguments
 set shell := ["bash", "-cue"]
 root_dir := `git rev-parse --show-toplevel`
+version := `git describe --tags --abbrev=0`
 ctr := "docker"
-tag := "latest"
-image := "ghcr.io/sdsc-ordes/gimie-api:" + tag
+image := "ghcr.io/sdsc-ordes/gimie-api:" + version
 image_dir := root_dir + "/tools/image"
 
 # Default recipe to list all recipes.
@@ -19,7 +19,7 @@ build *args:
     {{ctr}} build \
       -f "{{image_dir}}/Dockerfile" \
       -t "{{image}}" \
-      --build-arg VERSION="{{tag}}" \
+      --build-arg VERSION="{{version}}" \
       {{args}} \
       .
 
