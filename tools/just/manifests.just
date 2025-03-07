@@ -6,12 +6,12 @@ set shell := ["bash", "-cue"]
 # Default recipe to list all recipes.
 [private]
 default:
-    just --list secrets --no-aliases
+  just --list manifests --no-aliases
 
 alias fmt := format
 # Format manifests.
 format:
-    @cd "{{root_dir}}" && \
+  @cd "{{root_dir}}" && \
     yamlfmt **/*.y{a,}ml
 
 # Render manifests
@@ -22,4 +22,4 @@ render:
 alias apply := deploy
 # Apply manifests to the cluster.
 deploy:
-   just render | kubectl apply -
+  just render | kubectl apply -

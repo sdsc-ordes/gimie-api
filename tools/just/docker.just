@@ -1,42 +1,44 @@
 # We assume all encrypted secrets follow the naming pattern {{SECRET_DIR}}/*{{ENC_SUFFIX}}
-root_dir := `git rev-parse --show-toplevel`
-tag := "latest"
-image := "ghcr.io/sdsc-ordes/gimie-api"
-container_runtime := "docker"
+set positional-arguments
 set shell := ["bash", "-cue"]
+root_dir := `git rev-parse --show-toplevel`
+ctr := "docker"
+tag := "latest"
+image := "ghcr.io/sdsc-ordes/gimie-api:" + tag
+image_dir := root_dir + "/tools/image/Dockerfile"
 
 # Default recipe to list all recipes.
 [private]
 default:
-    just --list secrets --no-aliases
+  just --list docker --no-aliases
 
 # Build Docker images
 build:
-	@echo "🐋 Building docker image"
+  @echo "🐋 Building docker image"
   cd {{root_dir}} && \
-    {{container_runtime}} build \
-      -f "{{root_dir}}/tools/docker/Dockerfile" \
-      -t "{{image}}:{{tag}}" \
+    {{ctr}} build \
+      -f "{{image_dir}}" \
+      -t "{{image}}" \
       --build-arg VERSION="{{tag}}" \
       .
 # Run docker image
 run: build
   cd {{root_dir}} && \
-	  {{container_runtime}} run \
+    {{ctr}} run \
       --env-file .env \
       -p 7123:15400 \
-      $(IMAGE):$(VERSION)
+      "{{image}}"
 
 # Push Docker images
 push: build
-	@echo "🐋 Pushing docker image"
+  @echo "🐋 Pushing docker image"
   cd {{root_dir}} && \
-	  {{container_runtime}} push {{image}}:{{tag}}
+    {{ctr}} push {{image}}
 
 compose-up: ## Run the Docker Compose stack
-	@echo "🐋 Running docker-compose"
+  @echo "🐋 Running docker-compose"
   cd {{root_dir}} && \
-    {{CONTAINER_RUNTIME}} compose \
-      -f tools/docker/compose.yml \
+    {{ctr}} compose \
+      -f "{{image_dir}}" \
       up --build
 
