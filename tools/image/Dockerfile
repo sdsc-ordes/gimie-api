@@ -16,7 +16,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.3 /uv /uvx /bin/
 # install git
 RUN apt-get update && apt-get install -y git && apt-get clean
 
-ADD . /app
+ADD src CHANGELOG LICENSE README.md pyproject.toml uv.lock /app
 WORKDIR /app
 RUN uv sync --frozen
 
