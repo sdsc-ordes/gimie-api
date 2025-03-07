@@ -1,16 +1,6 @@
 {
   description = "gimie-api";
 
-  nixConfig = {
-    extra-substituters = [
-      # Nix community's cache server
-      "https://nix-community.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -61,17 +51,6 @@
           devShells = {
             default = pkgs.mkShell {
               packages = packagesBasic;
-            };
-
-            ci = pkgs.mkShell {
-              packages = packagesBasic;
-
-              # Due to some weird handling of TMPDIR inside containers:
-              # https://github.com/NixOS/nix/issues/8355
-              # We have to reset the TMPDIR to make `nix build` work inside
-              # a development shell.
-              # Without `nix develop` it works.
-              shellHook = "unset TMPDIR";
             };
           };
         };
