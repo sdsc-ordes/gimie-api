@@ -1,6 +1,6 @@
 # We assume all encrypted secrets follow the naming pattern {{SECRET_DIR}}/*{{ENC_SUFFIX}}
 root_dir := `git rev-parse --show-toplevel`
-DEPLOY_DIR := "{{root_dir}}/tools/deploy"
+deploy_dir := root_dir + "/tools/deploy"
 set shell := ["bash", "-cue"]
 
 # Default recipe to list all recipes.
@@ -11,15 +11,19 @@ default:
 alias fmt := format
 # Format manifests.
 format:
-  @cd "{{root_dir}}" && \
-    yamlfmt **/*.y{a,}ml
+  @cd "{{deploy_dir}}" && \
+    ytt fmt -f .
 
 # Render manifests
 render: 
-  cd "{{root_dir}}/tools/deploy" && \
-    ytt -f k8s/ -f schema.yaml -f values.yaml 
+  cd "{{deploy_dir}}" && \
+    ytt \
+      -f common.lib.star \
+      -f k8s/ \
+      -f schema.yaml
 
 alias apply := deploy
 # Apply manifests to the cluster.
 deploy:
-  just render | kubectl apply -
+  just manifests render \
+    | kubectl apply -f-
