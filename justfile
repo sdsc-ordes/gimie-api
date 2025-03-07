@@ -9,21 +9,17 @@ root_dir := `git rev-parse --show-toplevel`
 default:
     just --list --no-aliases
 
-alias fmt := format
-# Format manifests.
-format *args:
-    @cd "{{root_dir}}" && \
-    yamlfmt **/*.y{a,}ml
+# Setup project for development
+install: 
+	pip install -e '.[test,dev]'
 
-# Render manifests
-render: 
-  cd "{{root_dir}}/tools/deploy" && \
-    ytt -f k8s/ -f schema.yaml -f values.yaml 
+# Lint python code
+lint: install
+	ruff check src
 
-alias apply := deploy
-# Apply manifests to the cluster.
-deploy:
-   just render | kubectl apply -
+# Run unit tests
+test: install 
+	pytest
 
 alias dev := nix-develop
 # Enter a Nix development shell.
@@ -34,3 +30,6 @@ nix-develop *args:
     { [ -n "${cmd:-}" ] || cmd=("zsh"); } && \
     nix develop ./tools/nix#default --accept-flake-config --command "${cmd[@]}"
 
+# Manage manifests. Run `just manifests` for more info
+mod manifests 'tools/just/manifests.just'
+mod docker 'tools/just/docker.just'
