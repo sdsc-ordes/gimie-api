@@ -2,8 +2,9 @@
 
 ---
 name: "gimie-api"
+version: ""
 #@schema/validation min_len=1
-namespace: ""
+namespace: "gimie"
 replicas: 1
 #@schema/validation min_len=1
 image: "ghcr.io/sdsc-ordes/gimie-api:latest"

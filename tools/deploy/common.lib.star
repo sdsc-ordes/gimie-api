@@ -6,6 +6,7 @@ def resourceName(v, postfix=""):
 
     if postfix:
       name += "-" + postfix
+    end
 
     return name
 end
