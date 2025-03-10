@@ -16,6 +16,8 @@ spec:
   selector:
     matchLabels: #@ resourceLabels(v)
   template:
+    metadata:
+      labels: #@ resourceLabels(v)
     spec:
       restartPolicy: Always
       containers:
