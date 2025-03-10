@@ -15,11 +15,11 @@ default:
 
 # Render manifests
 render: 
-  cd "{{deploy_dir}}" && \
+  cd "{{deploy_dir}}/ytt" && \
     ytt \
       --data-values-env YTT \
       -f common.lib.star \
-      -f k8s/ \
+      -f templates/ \
       -f schema.yaml
 
 alias apply := deploy
