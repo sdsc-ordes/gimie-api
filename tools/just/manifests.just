@@ -15,12 +15,8 @@ default:
 
 # Render manifests
 render: 
-  cd "{{deploy_dir}}/ytt" && \
-    ytt \
-      --data-values-env YTT \
-      -f common.lib.star \
-      -f templates/ \
-      -f schema.yaml
+  cd "{{root_dir}}" && \
+    ytt -f "{{deploy_dir}}" --data-values-env YTT
 
 alias apply := deploy
 # Apply manifests to the cluster.
