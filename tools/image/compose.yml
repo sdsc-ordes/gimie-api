@@ -1,0 +1,9 @@
+services:
+  gimie_api:
+    build:
+      dockerfile: ./tools/image/Dockerfile
+    container_name: "gimie-api"
+    ports:
+      - "7123:15400"
+    volumes:
+      - ./src/:/app/src
