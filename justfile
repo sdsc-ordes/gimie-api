@@ -33,5 +33,5 @@ nix-develop *args:
 
 # Manage manifests.
 mod manifests 'tools/just/manifests.just'
-# Manage containers.
-mod docker 'tools/just/docker.just'
+# Manage container images.
+mod image 'tools/just/image.just'

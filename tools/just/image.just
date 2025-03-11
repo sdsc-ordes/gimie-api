@@ -10,11 +10,11 @@ image_dir := root_dir + "/tools/image"
 # Default recipe to list all recipes.
 [private]
 default:
-  just --list docker --no-aliases
+  just --list image --no-aliases
 
-# Build Docker images
+# Build images
 build *args:
-  @echo "🐋 Building docker image"
+  @echo "🐋 Building container image"
   cd {{root_dir}} && \
     {{ctr}} build \
       -f "{{image_dir}}/Dockerfile" \
@@ -23,7 +23,7 @@ build *args:
       {{args}} \
       .
 
-# Run docker image
+# Run image
 run *args: build
   cd {{root_dir}} && \
     {{ctr}} run \
@@ -32,15 +32,15 @@ run *args: build
       {{args}} \
       "{{image}}"
 
-# Push Docker images
+# Push images
 push *args: build
-  @echo "🐋 Pushing docker image"
+  @echo "🐋 Pushing container image"
   cd {{root_dir}} && \
     {{ctr}} push {{args}} {{image}}
 
-# Start the Docker Compose stack
+# Start the compose stack
 compose-up *args: 
-  @echo "🐋 Running docker-compose"
+  @echo "🐋 Running compose"
   cd {{root_dir}} && \
     {{ctr}} compose \
       --env-file .env \
