@@ -1,21 +1,51 @@
 # GimieAPI
 
-## How to build this docker container
+## Usage
+
+### Setup
+
+This repository contains a [justfile](./justfile), and we use [`just`](https://github.com/casey/just) as a command runner.
+
+We provide all the tools you need to work on this project in a nix development shell.
+See here to install nix: https://determinate.systems/nix-installer/
+
+To enter the dev-shell, run:
+
+```shell
+just dev
+```
+
+> [!NOTE]
+> Alternatively, you may enter the devshell directly with :
+> `nix develop ./tools/nix#default --accept-flake-config --command "zsh"`
+
+
+### With docker
+
+We build two docker images, a small "headless" version with only the REST server, and a larger image that bundles the REST server and a streamlit web application. These two images are differentiated by their tag: `<version>` vs `<version>-webapp`.
 
 First rename the `.env.dist` file to `.env` and add your github/gitlab token. Then you can run:
 
 ``` bash
-docker-compose up # add -d for detached
+just docker compose-up
 ```
 
 or
 
 ``` bash
-docker build -t gimie-api .
-docker run --env-file .env -p 7005:15400 gimie-api
+just docker build
+just docker run
 ```
 
-This will serve a instance running by default in port 7123.
+### With docker compose
+
+For development, it may be more convenient to use our docker compose stack.
+
+```
+just docker compose-up
+```
+
+This will serve a container exposing the API on port 7123.
 
 
 ## How to use the API
@@ -29,31 +59,32 @@ http://0.0.0.0:7123/
 In case we want to obtain the gimie output in json, just add the repo link to `/gimie/jsonld/GITHUB_REPO`
 
 ``` bash
-http://0.0.0.0:7123/gimie/jsonld/https://github.com/SDSC-ORD/gimie
+http://0.0.0.0:7123/gimie/jsonld/https://github.com/sdsc-ordes/gimie
 ```
 
 To calculate the graph and provide a serialized output in ttl do `/gimie/project/GITHUB_REPO`
 
 ``` bash
-http://0.0.0.0:7123/gimie/ttl/https://github.com/SDSC-ORD/gimie
+http://0.0.0.0:7123/gimie/ttl/https://github.com/sdsc-ordes/gimie
 ```
 
 ## How to access to the API documentation 
 
 ``` bash
-http://localhost:8000/docs
+http://localhost:7123/docs
 ```
 
-## How to develop?
+## Deployment
 
-``` bash
-docker build -t gimie-api .
-docker run --env-file .env -p 7005:15400 -it --entrypoint bash -v app:/app gimie-api -c "uvicorn app.main:app --host 0.0.0.0 --port 15400"
+We provide manifests to deploy the service on kubernetes.
+The manifest templates in [tools/deploy](tools/deploy) are managed with ytt and can be rendered using:
+
+```shell
+just manifests render
 ```
 
-## Changelog
+Or deployed directly with:
 
-- v0.2.0: Including orcid parsing
-- v0.1.0: Updating gimie to release [0.7.0](https://github.com/sdsc-ordes/gimie/releases/tag/v0.7.2)
-- v0.0.2: Updating gimie to release  [0.6.0](https://github.com/SDSC-ORD/gimie/releases/tag/0.6.0).
-- v0.0.1: Basic service using main branch from gimie.
+```shell
+just manifests deploy
+```
