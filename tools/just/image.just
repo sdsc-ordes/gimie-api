@@ -29,8 +29,8 @@ run *args: build
     {{ctr}} run \
       --env-file .env \
       -p 7123:15400 \
-      {{args}} \
-      "{{image}}"
+      "{{image}}" \
+      {{args}}
 
 # Push images
 push *args: build
