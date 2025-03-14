@@ -16,8 +16,9 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.3 /uv /uvx /bin/
 # install git
 RUN apt-get update && apt-get install -y git && apt-get clean
 
-ADD src CHANGELOG LICENSE README.md pyproject.toml uv.lock /app
 WORKDIR /app
+ADD CHANGELOG LICENSE README.md pyproject.toml uv.lock /app
+ADD src ./src
 RUN uv sync --frozen
 
 ENTRYPOINT ["uv", "run", "uvicorn", "src.gimie-api.main:app", "--host", "0.0.0.0", "--port", "15400"]

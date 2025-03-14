@@ -27,6 +27,8 @@ build *args:
 run *args: build
   cd {{root_dir}} && \
     {{ctr}} run \
+      --rm \
+      -it \
       --env-file .env \
       -p 7123:15400 \
       "{{image}}" \
