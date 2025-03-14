@@ -1,5 +1,7 @@
 # GimieAPI
 
+Containerized REST API around [gimie](https://github.com/sdsc-ordes/gimie).
+
 ## Usage
 
 ### Setup
@@ -27,14 +29,14 @@ We build two docker images, a small "headless" version with only the REST server
 First rename the `.env.dist` file to `.env` and add your github/gitlab token. Then you can run:
 
 ``` bash
-just docker compose-up
+just image compose-up
 ```
 
 or
 
 ``` bash
-just docker build
-just docker run
+just image build
+just image run
 ```
 
 ### With docker compose
@@ -42,7 +44,7 @@ just docker run
 For development, it may be more convenient to use our docker compose stack.
 
 ```
-just docker compose-up
+just image compose-up
 ```
 
 This will serve a container exposing the API on port 7123.
