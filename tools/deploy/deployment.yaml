@@ -1,0 +1,39 @@
+#@ load("@ytt:data", "data")
+#@ load("common.lib.star", "resourceLabels")
+#@ v = data.values
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ v.name
+  namespace: #@ v.namespace
+  labels: #@ resourceLabels(v)
+spec:
+  replicas: #@ v.replicas
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: #@ resourceLabels(v)
+  template:
+    metadata:
+      labels: #@ resourceLabels(v)
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: #@ v.name
+          image: #@ v.image
+          ports:
+          - containerPort: 15400
+          env:
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: GITHUB_TOKEN
+                  name: #@ v.name + "-tokens"
+            - name: GITLAB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: GITLAB_TOKEN
+                  name: #@ v.name + "-tokens"
+

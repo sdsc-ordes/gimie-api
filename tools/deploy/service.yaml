@@ -1,0 +1,21 @@
+#@ load("@ytt:data", "data")
+#@ load("common.lib.star", "resourceLabels")
+#@ v = data.values
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ v.name
+  labels: #@ resourceLabels(v)
+spec:
+  type: NodePort
+  ports:
+    - name: "gimie-port"
+      port: 15400
+      targetPort: 15400
+  selector:
+    io.gimie.service: gimie-api
+status:
+  loadBalancer: {}
+
