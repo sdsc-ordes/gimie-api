@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from gimie.project import Project
 from gimie.converters.publiccode import convert_to_publiccode
+from gimie.graph.namespaces import SDO
+from rdflib import RDF
 
 
 app = FastAPI()
@@ -85,7 +87,18 @@ async def gimie_publiccode(full_path: str):
     try:
         proj = Project(full_path)
         graph = proj.extract()
-        return convert_to_publiccode(graph)
+        pc = convert_to_publiccode(graph)
+        # The converter leaves the (publiccode-required) features field empty.
+        # Seed it from the repo's keywords/topics as a rough starting point the
+        # user can refine; keywords are tags, not capabilities, but it beats blank.
+        try:
+            subject = next(graph.subjects(RDF.type, SDO.SoftwareSourceCode))
+            keywords = sorted(str(k) for k in graph.objects(subject, SDO.keywords))
+            if keywords and not pc["description"]["en"].get("features"):
+                pc["description"]["en"]["features"] = keywords
+        except (StopIteration, KeyError):
+            pass
+        return pc
     except Exception as e:
         return JSONResponse(
             status_code=502,
