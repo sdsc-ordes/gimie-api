@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from gimie.project import Project
+from gimie.converters.publiccode import convert_to_publiccode
 
 
 app = FastAPI()
@@ -77,6 +78,19 @@ async def gimie_jsonld(full_path:str):
         return {"link": full_path, "output": output}
     except Exception as e:
         return {"link": full_path, "output": e}
+
+@app.get("/publiccode/{full_path:path}")
+async def gimie_publiccode(full_path: str):
+    """Run gimie on a repo URL and return a publiccode-shaped object."""
+    try:
+        proj = Project(full_path)
+        graph = proj.extract()
+        return convert_to_publiccode(graph)
+    except Exception as e:
+        return JSONResponse(
+            status_code=502,
+            content={"link": full_path, "error": str(e)},
+        )
 
 @app.exception_handler(ValueError)
 async def value_error_exception_handler(request: Request, exc: ValueError):
