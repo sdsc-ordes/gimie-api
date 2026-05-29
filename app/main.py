@@ -1,14 +1,34 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 from gimie.project import Project
 
 
 app = FastAPI()
 
+# Allow the OSS Catalog frontend (and other browser clients) to call this API.
+# CORS_ORIGINS can be a comma-separated list; defaults to local Astro dev servers.
+_origins = os.environ.get(
+    "CORS_ORIGINS",
+    "http://localhost:4321,http://localhost:3000",
+).split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in _origins if o.strip()],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def index():
     return {"title": "Hello, welcome to the Gimie API v0.1.0. Gimie Version 0.7.2"}
+
+@app.get("/ping")
+async def ping():
+    """Connectivity test endpoint for the frontend."""
+    return {"status": "ok", "service": "gimie-api", "message": "pong"}
 
 @app.get("/test/{string}")
 async def test(string):
